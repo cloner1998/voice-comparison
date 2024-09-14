@@ -17,6 +17,7 @@ class VoiceRecorder {
 
     fun recordVoice(durationInSeconds: Int, outputFileName: String) {
 
+        // I can not understand signed and bigEndian but see it betters to be true!!
         val format = AudioFormat(1000f, 16, 1, true, true)
         val info = DataLine.Info(TargetDataLine::class.java, format)
 
@@ -31,7 +32,10 @@ class VoiceRecorder {
         println("Recording started...")
 
         val out = ByteArrayOutputStream()
+        // number of samples per second * number of bytes in each frame
+        //this buffer size ensure that creat a large enough of ot hold one second of audio data
         val bufferSize = format.sampleRate.toInt() * format.frameSize
+        //It serves as a temporary storage for audio data as it's being read from the input line.
         val buffer = ByteArray(bufferSize)
 
         try {
@@ -39,7 +43,7 @@ class VoiceRecorder {
             val start = System.currentTimeMillis()
             while (System.currentTimeMillis() - start < durationInSeconds * 1000) {
                 bytesRead = line.read(buffer, 0, buffer.size)
-                out.write(buffer, 0, bytesRead)
+                out.write(bytesRead)
             }
         } finally {
             line.stop()
