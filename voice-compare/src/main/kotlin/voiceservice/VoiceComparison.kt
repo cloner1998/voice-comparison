@@ -40,11 +40,10 @@ class VoiceComparison {
     }
 
     private fun calculateSimilarityByCorrelation(stream1: AudioInputStream, stream2: AudioInputStream): Double {
-        val dataByte1 = stream1.readAllBytes()
-        val dataByte2 = stream2.readAllBytes()
 
-        val correlation1 = dataByte1.toDoubleSamples()
-        val correlation2 = dataByte2.toDoubleSamples()
+        val correlation1 = stream1.readAllBytes().toDoubleSamples()
+        val correlation2 = stream2.readAllBytes().toDoubleSamples()
+
         val correlationPercentage = ((PearsonsCorrelation().correlation(correlation1, correlation2)) + 1) * 50
 
         return correlationPercentage
