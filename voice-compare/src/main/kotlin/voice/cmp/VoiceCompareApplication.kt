@@ -1,7 +1,6 @@
-package com.example.demo
+package voice.cmp
 
-import com.example.demo.voiceservice.VoiceRecorder
-import org.springframework.beans.factory.annotation.Autowired
+import voice.cmp.voiceservice.VoiceRecorder
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

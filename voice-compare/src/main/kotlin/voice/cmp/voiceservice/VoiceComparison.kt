@@ -1,8 +1,7 @@
-package com.example.demo.voiceservice
+package voice.cmp.voiceservice
 
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation
 import org.springframework.stereotype.Service
-import org.springframework.context.annotation.Bean
 import java.io.File
 import javax.sound.sampled.AudioInputStream
 import javax.sound.sampled.spi.AudioFileReader
