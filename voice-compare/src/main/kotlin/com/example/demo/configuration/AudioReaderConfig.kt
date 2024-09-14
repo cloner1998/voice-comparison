@@ -14,9 +14,9 @@ class AudioReaderConfig {
     @Bean
     fun audioFileReader(): AudioFileReader {
         return object : AudioFileReader() {
-            override fun getAudioFileFormat(stream: InputStream?) = AudioSystem.getAudioFileFormat(stream)
+            override fun getAudioFileFormat(stream: InputStream) = AudioSystem.getAudioFileFormat(stream)
             override fun getAudioFileFormat(url: URL) = AudioSystem.getAudioFileFormat(url)
-            override fun getAudioFileFormat(file: File?) = AudioSystem.getAudioFileFormat(file)
+            override fun getAudioFileFormat(file: File) = AudioSystem.getAudioFileFormat(file)
 
             override fun getAudioInputStream(file: File) = AudioSystem.getAudioInputStream(file)
             override fun getAudioInputStream(url: URL) = AudioSystem.getAudioInputStream(url)
