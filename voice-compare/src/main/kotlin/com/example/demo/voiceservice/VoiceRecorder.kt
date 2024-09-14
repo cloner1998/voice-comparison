@@ -5,7 +5,6 @@ import org.springframework.core.io.ResourceLoader
 import org.springframework.stereotype.Component
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.nio.file.Files
 import java.nio.file.Paths
 import javax.sound.sampled.*
 
@@ -18,7 +17,7 @@ class VoiceRecorder {
     fun recordVoice(durationInSeconds: Int, outputFileName: String) {
 
         // I can not understand signed and bigEndian but see it betters to be true!!
-        val format = AudioFormat(1000f, 16, 1, true, true)
+        val format = AudioFormat(44100f, 16, 1, true, false)
         val info = DataLine.Info(TargetDataLine::class.java, format)
 
         if (!AudioSystem.isLineSupported(info)) {
@@ -43,7 +42,8 @@ class VoiceRecorder {
             val start = System.currentTimeMillis()
             while (System.currentTimeMillis() - start < durationInSeconds * 1000) {
                 bytesRead = line.read(buffer, 0, buffer.size)
-                out.write(bytesRead)
+                out.write(buffer,0,bytesRead)
+                println(1)
             }
         } finally {
             line.stop()
@@ -53,19 +53,23 @@ class VoiceRecorder {
         println("Recording finished.")
 
         val audioBytes = out.toByteArray()
-        val base = ByteArrayInputStream(audioBytes)
-        val clip = AudioSystem.getAudioInputStream(base)
+        println(audioBytes.size)
 
-        saveToResources(clip, outputFileName)
+
+        saveToResources(audioBytes, format, outputFileName)
     }
 
-    private fun saveToResources(audioInputStream: AudioInputStream, fileName: String) {
+    private fun saveToResources(audioInputStream: ByteArray, format: AudioFormat, fileName: String) {
 
         val filePath = Paths.get("E:\\spring\\voice-compare\\voice-compare\\src\\main\\resources", fileName)
 
-        Files.createDirectories(filePath.parent)
+        val audionInputForWrite = AudioInputStream(
+            ByteArrayInputStream(audioInputStream),
+            format,
+            audioInputStream.size.toLong() / format.frameSize
+        )
 
-        AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, filePath.toFile())
+        AudioSystem.write(audionInputForWrite, AudioFileFormat.Type.WAVE, filePath.toFile())
         println("Voice saved to: ${filePath.toAbsolutePath()}")
     }
 }
