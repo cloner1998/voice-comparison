@@ -2,7 +2,7 @@ package com.example.demo.voiceservice
 
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation
 import org.springframework.stereotype.Service
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Bean
 import java.io.File
 import javax.sound.sampled.AudioInputStream
 import javax.sound.sampled.spi.AudioFileReader
@@ -10,10 +10,9 @@ import kotlin.math.abs
 import kotlin.math.min
 
 @Service
-class VoiceComparison {
-
-    @Autowired
-    lateinit var audioFileReader: AudioFileReader
+class VoiceComparison(
+    val audioFileReader: AudioFileReader
+) {
 
     fun compareVoice(voicePath1: String, voicePath2: String): Double {
         val streamData1 = audioFileReader.getAudioInputStream(File(voicePath1))
