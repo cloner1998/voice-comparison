@@ -39,10 +39,14 @@ class VoiceComparison(
 
     private fun calculateSimilarityByCorrelation(stream1: AudioInputStream, stream2: AudioInputStream): Double {
 
-        val correlation1 = stream1.readAllBytes().toDoubleSamples()
-        val correlation2 = stream2.readAllBytes().toDoubleSamples()
+        val correlation1 = stream1.readAllBytes()
+        val correlation2 = stream2.readAllBytes()
 
-        val correlationPercentage = ((PearsonsCorrelation().correlation(correlation1, correlation2)) + 1) * 50
+        val correlationList: List<DoubleArray> = cutToMinSize(correlation1, correlation2).map {
+            it.toDoubleSamples()
+        }
+
+        val correlationPercentage = ((PearsonsCorrelation().correlation(correlationList[0], correlationList[1])) + 1) * 50
 
         return correlationPercentage
     }
@@ -55,5 +59,14 @@ class VoiceComparison(
         (a.toInt() and 0xFF or (b.toInt() shl 8)).toDouble()
     }
 
-
+    //for become sure that two array have the same length
+    fun cutToMinSize(array1: ByteArray, array2: ByteArray): MutableList<ByteArray>{
+        val correlationList: MutableList<ByteArray> = mutableListOf()
+        val minSize = minOf(array1.size, array2.size)
+        val cutArray1 = array1.copyOfRange(0, minSize)
+        val cutArray2 = array2.copyOfRange(0, minSize)
+        correlationList.add(cutArray1)
+        correlationList.add(cutArray2)
+        return correlationList
+    }
 }
