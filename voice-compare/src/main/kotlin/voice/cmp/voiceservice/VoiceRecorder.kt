@@ -1,4 +1,4 @@
-package voice.cmp   .voiceservice
+package voice.cmp.voiceservice
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.ResourceLoader
