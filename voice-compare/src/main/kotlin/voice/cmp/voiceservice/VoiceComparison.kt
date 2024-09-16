@@ -16,7 +16,7 @@ class VoiceComparison(
     fun compareVoice(voicePath1: String, voicePath2: String): Double {
         val streamData1 = audioFileReader.getAudioInputStream(File(voicePath1))
         val streamData2 = audioFileReader.getAudioInputStream(File(voicePath2))
-        return calculateSimilarityByAbsoluteValue(streamData1, streamData2)
+        return calculateSimilarityByCorrelation(streamData1, streamData2)
 
     }
 
@@ -46,7 +46,11 @@ class VoiceComparison(
             it.toDoubleSamples()
         }
 
-        val correlationPercentage = ((PearsonsCorrelation().correlation(correlationList[0], correlationList[1])) + 1) * 50
+        var correlationPercentage = ((PearsonsCorrelation().correlation(correlationList[0], correlationList[1])))*100
+        //TODO("what is upper bound and lower bound and why we get minus sign")
+        if (correlationPercentage < 0){
+            correlationPercentage = 0.0
+        }
 
         return correlationPercentage
     }
